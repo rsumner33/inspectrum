@@ -47,6 +47,7 @@ SpectrogramPlot::SpectrogramPlot(std::shared_ptr<SampleSource<std::complex<float
 
     tunerTransform = std::make_shared<TunerTransform>(src);
     connect(&tuner, &Tuner::tunerMoved, this, &SpectrogramPlot::tunerMoved);
+    tunerMoved();
 }
 
 void SpectrogramPlot::invalidateEvent()
