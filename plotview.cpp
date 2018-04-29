@@ -50,6 +50,7 @@ PlotView::PlotView(InputSource *input) : cursors(this), viewRange({0, 0})
 
     addPlot(spectrogramPlot);
 
+    viewport()->installEventFilter(this);
     mainSampleSource->subscribe(this);
 }
 
