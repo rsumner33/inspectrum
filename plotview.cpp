@@ -34,7 +34,7 @@
 #include <QClipboard>
 #include "plots.h"
 
-PlotView::PlotView(InputSource *input) : cursors(this), viewRange({0, 0})
+PlotView::PlotView(InputSource *input) : cursors(this), tuner(this), viewRange({0, 0})
 {
     mainSampleSource = input;
     setDragMode(QGraphicsView::ScrollHandDrag);
@@ -42,6 +42,8 @@ PlotView::PlotView(InputSource *input) : cursors(this), viewRange({0, 0})
     setMouseTracking(true);
     enableCursors(false);
     connect(&cursors, SIGNAL(cursorsMoved()), this, SLOT(cursorsMoved()));
+    viewport()->installEventFilter(&tuner);
+    connect(&tuner, &Tuner::tunerMoved, this, &PlotView::tunerMoved);
 
     spectrogramPlot = new SpectrogramPlot(std::shared_ptr<SampleSource<std::complex<float>>>(mainSampleSource));
     auto tunerOutput = std::dynamic_pointer_cast<SampleSource<std::complex<float>>>(spectrogramPlot->output());
@@ -445,6 +447,7 @@ void PlotView::paintEvent(QPaintEvent *event)
     PLOT_LAYER(paintFront);
     if (cursorsEnabled)
         cursors.paintFront(painter, rect, viewRange);
+    tuner.paintFront(painter, rect, viewRange);
 
     if (timeScaleEnabled) {
         paintTimeScale(painter, rect, viewRange);

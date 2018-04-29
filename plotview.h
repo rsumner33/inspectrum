@@ -28,6 +28,7 @@
 #include "samplesource.h"
 #include "spectrogramplot.h"
 #include "traceplot.h"
+#include "tuner.h"
 
 class PlotView : public QGraphicsView, Subscriber
 {
@@ -52,6 +53,7 @@ public slots:
     void setFFTAndZoom(int fftSize, int zoomLevel);
     void setPowerMin(int power);
     void setPowerMax(int power);
+    void tunerMoved();
 
 protected:
     void contextMenuEvent(QContextMenuEvent * event) override;
@@ -62,6 +64,7 @@ protected:
 
 private:
     Cursors cursors;
+    Tuner tuner;
     SampleSource<std::complex<float>> *mainSampleSource = nullptr;
     SpectrogramPlot *spectrogramPlot = nullptr;
     std::vector<std::unique_ptr<Plot>> plots;
